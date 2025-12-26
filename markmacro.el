@@ -245,7 +245,7 @@ See `thing-at-point' for more information."
        (save-excursion
          (goto-char mark-bound-start)
          (while (< (point) mark-bound-end)
-           (unless (string-match-p "^[ ]*$" (buffer-substring-no-properties (point-at-bol) (point-at-eol)))
+           (unless (string-match-p "^[ ]*$" (buffer-substring-no-properties (pos-bol) (pos-eol)))
              (setq current-bound (bounds-of-thing-at-point 'line))
              (when current-bound
                (cl-pushnew current-bound mark-bounds)))
@@ -317,7 +317,7 @@ See `thing-at-point' for more information."
          (while (< (point) mark-bound-end)
            (dolist (candidate candidates)
              (when (= (point) (cadr candidate))
-               (when (search-forward (car candidate) (point-at-eol) t)
+               (when (search-forward (car candidate) (pos-eol) t)
                  (setq current-bound (cons (save-excursion
                                              (backward-char (length (car candidate)))
                                              (point))
@@ -370,7 +370,7 @@ See `thing-at-point' for more information."
          (advice-add 'keyboard-quit :before #'markmacro-exit))
         (t
          (delete-overlay mouse-secondary-overlay)
-         (move-overlay mouse-secondary-overlay (point-at-bol) (point-at-eol))
+         (move-overlay mouse-secondary-overlay (pos-bol) (pos-eol))
          (advice-add 'keyboard-quit :before #'markmacro-exit)))
   (deactivate-mark t))
 
