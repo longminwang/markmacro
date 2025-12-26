@@ -176,7 +176,7 @@ See `thing-at-point' for more information."
                                        (point))
                                      (point)))
            (when current-bound
-             (add-to-list 'mark-bounds current-bound t)))
+             (cl-pushnew current-bound mark-bounds)))
 
          mark-bounds)))))
 
@@ -198,7 +198,7 @@ See `thing-at-point' for more information."
                      (> (point) last-point))
            (setq current-bound (bounds-of-thing-at-point 'word))
            (when current-bound
-             (add-to-list 'mark-bounds current-bound t))
+             (cl-pushnew current-bound mark-bounds))
            (setq last-point (point))
            (forward-word))
 
@@ -225,7 +225,7 @@ See `thing-at-point' for more information."
            (while (and (<= (point) mark-bound-end)
                        (> (point) last-point))
              (when (string-equal (char-to-string (char-after)) current-char)
-               (add-to-list 'mark-bounds (cons (point) (1+ (point)))))
+               (cl-pushnew (cons (point) (1+ (point))) mark-bounds))
              (setq last-point (point))
              (forward-char))
 
@@ -248,7 +248,7 @@ See `thing-at-point' for more information."
            (unless (string-match-p "^[ ]*$" (buffer-substring-no-properties (point-at-bol) (point-at-eol)))
              (setq current-bound (bounds-of-thing-at-point 'line))
              (when current-bound
-               (add-to-list 'mark-bounds current-bound t)))
+               (cl-pushnew current-bound mark-bounds)))
 
            (forward-line))
 
@@ -322,7 +322,7 @@ See `thing-at-point' for more information."
                                              (backward-char (length (car candidate)))
                                              (point))
                                            (point)))
-                 (add-to-list 'mark-bounds current-bound t))))
+                 (cl-pushnew current-bound mark-bounds))))
 
            (forward-line))
 
@@ -406,7 +406,7 @@ Usage:
                    (>= mend current-point))
               (setq temp-bound (cons mstart mend))
             (push (cons mstart mend) mark-bounds)))))
-    (add-to-list 'mark-bounds temp-bound t)
+    (cl-pushnew temp-bound mark-bounds)
 
     (dolist (bound mark-bounds)
       (let* ((overlay (make-overlay (car bound) (cdr bound))))
