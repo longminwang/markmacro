@@ -277,10 +277,10 @@ See `thing-at-point' for more information."
                              (not (member (treesit-node-type c) '("(" ")")))))))
        ;; Mark parameters in function.
        (function-node
-        (when-let (parameters-node (treesit-filter-child
-                                    function-node
-                                    (lambda (c)
-                                      (member (treesit-node-type c) '("parameters")))))
+        (when-let* ((parameters-node (treesit-filter-child
+                                      function-node
+                                      (lambda (c)
+					(member (treesit-node-type c) '("parameters"))))))
           (setq param-nodes (treesit-filter-child
                              (nth 0 parameters-node)
                              (lambda (c)
@@ -383,7 +383,7 @@ Usage:
 3. Type something.
 4. Call `markmacro-apply-all' apply kmacro to all mark entities."
   (interactive "P")
-  (when-let
+  (when-let*
       ((sec-region-start (or (overlay-start mouse-secondary-overlay) (point-min)))
        (sec-region-end (or (overlay-end mouse-secondary-overlay) (point-max)))
        (target
